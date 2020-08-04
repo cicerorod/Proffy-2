@@ -9,7 +9,7 @@ import purpleHeart from '../../assets/icons/purple-heart.svg';
 import './styles.css';
 import { Link } from 'react-router-dom';
 
-export default function Landing() {
+export default function Landing(): JSX.Element  {
   return (
     <main id="page-landing">
       <section id="page-landing-content" className="container">

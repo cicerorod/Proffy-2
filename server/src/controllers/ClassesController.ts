@@ -57,7 +57,7 @@ export default class ClassesController {
       return response.status(201).send();
     }
     catch(error) {
-      transaction.rollback();
+      await transaction.rollback();
       return response.status(400).json({
         'message': 'Unexpected error',
         'error': error

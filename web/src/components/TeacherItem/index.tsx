@@ -1,40 +1,74 @@
 import React from 'react';
 import './styles.css';
 import whatsappIcon from '../../assets/icons/whatsapp.svg';
+import api from '../../services/api';
 
-const TeacherItem: React.FC = () => {
+export interface Teacher {
+  id: number;
+  subject: string;
+  cost: number;
+  user_id: number;
+  name: string;
+  avatar: string;
+  whatsapp: string;
+  bio: string;
+}
+
+interface TeacherItemProps {
+  teacher: Teacher;
+}
+
+export default function TeacherItem(props: TeacherItemProps): JSX.Element {
+  const { teacher } = props;
+  const { whatsapp } = teacher;
+
+  const formatedNumber = whatsapp.trim();
+  const urlAPIWhatsapp = `https://api.whatsapp.com/send?phone=55${ formatedNumber }`;
+
+  function createNewConnection() {
+    api.post('connections', {
+      user_id: teacher.id
+    });
+  }
+
   return (
     <section className="teacher-item-card">
       <article className="teacher-item">
         <header>
           <img
-            src="https://avatars3.githubusercontent.com/u/48859060?s=460&u=2c3bdd59585c0ed134934d2ab50e025c4932141d&v=4"
-            alt="Roger Bernardo de Melo Lima"
+            src={ teacher.avatar }
+            alt={ teacher.name }
           />
           <div>
-            <strong>Roger Bernardo</strong>
-            <span>Programação</span>
+            <strong>{ teacher.name }</strong>
+            <span>{ teacher.subject }</span>
           </div>
         </header>
 
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fringilla nunc eget dolor vulputate, nec iaculis mauris ullamcorper. In maximus aliquam nisi, at fermentum eros lacinia viverra. In commodo finibus.
-          </p>
+          {
+            teacher.bio
+          }
+        </p>
 
         <footer>
           <p>
             Preço/hora:
-              <strong>R$ 100,00 </strong>
+              <strong>{ `R$: ${ teacher.cost }` } </strong>
           </p>
-          <button type="button">
+
+          <a
+            onClick={ createNewConnection }
+            href={ urlAPIWhatsapp }
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={ whatsappIcon } alt="Whatsapp" />
               Entrar em contato
-            </button>
+          </a>
         </footer>
 
       </article>
     </section>
   );
-};
-
-export default TeacherItem;
+}
